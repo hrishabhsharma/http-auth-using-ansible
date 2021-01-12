@@ -1,0 +1,31 @@
+- hosts: all
+  tasks:
+  - package:
+      name: "httpd"
+
+  - copy:
+      dest: "/var/www/html/index.html"
+      content: "secure page!! "
+
+  - replace:
+      path: "/etc/httpd/conf/httpd.conf"
+      regexp: "AllowOverride None"
+      replace: "AllowOverride AuthConfig"
+
+  - copy:
+      dest: "/var/www/html/.htaccess"
+      src:  ".htaccess" 
+
+  - pip:
+      name: "passlib"
+
+  - htpasswd:
+      path: "/etc/www.passwd"
+      name: "sharma"
+      password: "password"
+
+  - service:
+      name: "httpd"
+      state: started
+
+        
